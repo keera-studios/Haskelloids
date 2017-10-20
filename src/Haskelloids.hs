@@ -1,7 +1,6 @@
 -- #### Haskelloids.hs
 
 -- TODO Implement hyperspace jump
--- TODO Implement extra asteroids
 -- TODO Implement bonus scores
 -- TODO Implement bonus life
 

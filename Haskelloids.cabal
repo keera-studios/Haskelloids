@@ -7,7 +7,7 @@ Name:                Haskelloids
 -- The package version. See the Haskell package versioning policy
 -- (http://www.haskell.org/haskellwiki/Package_versioning_policy) for
 -- standards guiding when and how versions should be incremented.
-Version:             0.1.0
+Version:             0.1.1
 
 -- A short (one-line) description of the package.
 Synopsis:            A reproduction of the Atari 1979 classic "Asteroids"
@@ -50,13 +50,25 @@ Cabal-version:       >=1.6
 
 Executable Haskelloids
   Hs-Source-Dirs:      src
+  
+  Other-modules:
+    Data.IdentityList,
+    Haskelloids.Input,
+    Haskelloids.Object,
+    Haskelloids.Object.Asteroid,
+    Haskelloids.Object.Bullet,
+    Haskelloids.Object.Dust,
+    Haskelloids.Object.Ship,
+    Haskelloids.Geometry,
+    Haskelloids.Geometry.Text,
+    Haskelloids.Graphics
+    
   -- .hs or .lhs file containing the Main module.
   Main-is:             Haskelloids.hs
   
   -- Packages needed in order to build this package.
   Build-depends:
     base        == 4.*,
-    haskell98   == 1.*,
     containers  == 0.*,
     random      == 1.*,
     MonadRandom == 0.1.*,
