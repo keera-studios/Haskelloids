@@ -72,7 +72,7 @@ Executable Haskelloids
     containers  == 0.*,
     random      == 1.*,
     MonadRandom == 0.1.*,
-    hmatrix     >= 0.7 && < 1,
+    hmatrix     >= 0.7 && < 0.10,
     HGL         == 3.*,
     Yampa       >= 0.9 && < 1
     
