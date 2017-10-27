@@ -16,7 +16,7 @@ Synopsis:            A reproduction of the Atari 1979 classic "Asteroids"
 -- Description:         
 
 -- URL for the project homepage or repository.
-Homepage:            http://www.matthewhayden.co.uk
+Homepage:            https://github.com/keera-studios/Haskelloids
 
 -- The license under which the package is released.
 License:             BSD3
