@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -XArrows -XRankNTypes #-}
+{-# LANGUAGE Arrows, RankNTypes #-}
 module Haskelloids.Object (Object,
                            ObjectClass(..),
                            ObjectInput(..),
@@ -10,7 +10,7 @@ module Haskelloids.Object (Object,
 
 import Control.Arrow ((&&&), returnA)
 
-import FRP.Yampa (SF, Event(..), DTime, (>>>), (>>^), integral, merge, mergeBy, 
+import FRP.Yampa (SF, Event(..), DTime, (>>>), (>>^), integral, merge, mergeBy,
                   switch, attach, constant, identity, after, once, isEvent,
                   tag)
 
@@ -86,7 +86,7 @@ hits objs = hits' objs []
 
 hits' :: [(ILKey, ObjectOutput)] -> [(ILKey, ObjectOutput)] -> [ILKey]
 hits' []             _    = []
-hits' ((k, oo):rest) seen = 
+hits' ((k, oo):rest) seen =
   let cllsn = any (\x -> (collideObj (ooObjClass oo) . ooObjClass . snd $ x)
                           && (intersect (ooCllsnBox oo) . ooCllsnBox . snd $ x))
                   (seen ++ rest)

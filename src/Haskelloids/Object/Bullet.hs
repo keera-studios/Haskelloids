@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -XArrows #-}
+{-# LANGUAGE Arrows #-}
 module Haskelloids.Object.Bullet (bulletSF
                                  ) where
 
@@ -37,18 +37,18 @@ bulletMaxAge = 0.75
 -- #### Signal function ########################################################
 
 bulletSF :: Point -> Point2 -> Point2 -> Angle -> Object
-bulletSF (w, h) (x0, y0) (vx0, vy0) o = 
+bulletSF (w, h) (x0, y0) (vx0, vy0) o =
   let !vx = vx0 + bulletSpeed * cos o
       !vy = vy0 + bulletSpeed * sin o
   in proc oi -> do
        x <- teleport w buffer x0 -< vx
        y <- teleport h buffer y0 -< vy
-       
+
        let bulShape = shape . Translate (x,y) $ bulletFigure
-       
+
        die <- edge <<< (> bulletMaxAge) ^<< time -< ()
        hit <- arr oiHit -< oi
-       
+
        returnA -<
           ObjectOutput {
             ooPos      = (x,y),
@@ -60,4 +60,3 @@ bulletSF (w, h) (x0, y0) (vx0, vy0) o =
           }
 
 -- #### Function definitions ###################################################
-
