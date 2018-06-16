@@ -14,14 +14,10 @@ import Graphics.HGL.Draw.Picture (polyline, ellipse)
 import Data.Ratio ((%))
 import Data.List (nub)
 
-import Data.Packed.Matrix (Matrix, ident, fromLists)
-import Data.Packed.Vector (Vector, (|>), toList)
-
-import Numeric.LinearAlgebra.Algorithms (det)
-import Numeric.LinearAlgebra.Interface ((<>))
+import Numeric.LinearAlgebra (Matrix, Vector, (|>), (#>), (<>), det, ident, fromLists, toList)
 
 type Angle = Double
-type Point2 = (Double,Double)
+type Point2 = (Double, Double)
 type Segment = (Point2, Point2)
 
 -- #### Datatype defintions ####################################################
@@ -104,7 +100,7 @@ shape f = shape' (ident 3) f
    toHomo (x, y) = (3 |> [x, y, 1])
    transform :: Matrix Double -> Point2 -> Point2
    transform m p = (x, y)
-     where (x:y:_) = (toList . (m <>) . toHomo) p
+     where (x:y:_) = (toList . (m #>) . toHomo) p
 
 regularPolygon :: Int -> Double -> Figure
 regularPolygon n r | n < 3     = error "regularPolygon - cannot construct a regular polygon of less than 3 sides"
