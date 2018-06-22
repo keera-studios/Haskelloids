@@ -71,11 +71,11 @@ Executable Haskelloids
     base        == 4.*,
     containers  == 0.*,
     random      == 1.*,
-    MonadRandom == 0.1.*,
-    hmatrix     >= 0.7 && < 0.10,
+    MonadRandom == 0.5.*,
+    hmatrix     == 0.18.*,
     HGL         == 3.*,
-    Yampa       >= 0.9 && < 1
-    
+    Yampa       == 0.10.*
+
   -- Modules not exported by this package.
   -- Other-modules:       
   
