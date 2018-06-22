@@ -54,7 +54,7 @@ procWindowEv gi Key{ keysym = k, isDown = down }
   | isUpKey     k          = gi{ uiThrust     = FRP.Event down }
   | isShiftLKey k
      && down               = gi{ uiHyperSpace = FRP.Event ()   }
-  | isCharKey   k 
+  | isCharKey   k
      && keyToChar k == ' '
      && down               = gi{ uiFire       = FRP.Event ()   }
 procWindowEv gi _ = gi
