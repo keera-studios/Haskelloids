@@ -72,7 +72,7 @@ segments :: [Point2] -> [Segment]
 segments ps = zipWith (,) ps (tail . cycle $ ps)
 
 shape :: Figure -> Shape
-shape f = shape' (ident 3) f 
+shape f = shape' (ident 3) f
  where
    -- shape' - uses homogeneous coordinates so we can do affine translations (i.e. linearly dependant transformations)
    shape' :: Matrix Double -> Figure -> Shape

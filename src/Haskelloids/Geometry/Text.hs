@@ -69,7 +69,7 @@ sp = []
 -- #### Function definitions ###################################################
 
 fromString :: Alignment -> String -> [Figure]
-fromString align str = 
+fromString align str =
   let offset = case align of
                  AlignLeft   -> 0
                  AlignCentre -> -width / 2
