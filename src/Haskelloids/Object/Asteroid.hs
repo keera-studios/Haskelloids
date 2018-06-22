@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -XArrows #-}
+{-# LANGUAGE Arrows #-}
 module Haskelloids.Object.Asteroid (RoidSz(..),
                                     asteroidSF
                                    )where
@@ -59,7 +59,7 @@ roidCllsnFigure3 = Polygon [(-32, -8), (-32, 7), (-16, 29), (0, 30), (16, 30),
 roidCllsnFigure4 = Polygon [(-32, -16), (-32, 17), (-16, 33), (9, 33), (34, 17),
                             (23, 2), (35, -15), (18, -29), (-16, -29),
                             (-32, -16)]
-                       
+
 buffer :: Int
 buffer = 40
 
@@ -81,15 +81,15 @@ asteroidSF g (w, h) (x0, y0) s o sz fig =
                           | r <= 0.5  -> (roidFigure2, roidCllsnFigure2)
                           | r <= 0.75 -> (roidFigure3, roidCllsnFigure3)
                           | otherwise -> (roidFigure4, roidCllsnFigure4)
-      
+
   in proc oi -> do
        x <- teleport w buf x0 -< vx
        y <- teleport h buf y0 -< vy
-       
+
        let roidShape = shape . Translate (x,y) . Scale (scale sz) $ fg'
-       
+
        hit <- arr oiHit -< oi
-       
+
        returnA -< ObjectOutput {
                     ooPos      = (x,y),
                     ooCllsnBox = roidShape,

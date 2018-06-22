@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -XArrows #-}
+{-# LANGUAGE Arrows #-}
 module Haskelloids.Object.Ship (shipSF,
                                 shipFigure
                                ) where
@@ -68,33 +68,33 @@ shipSF (w, h) (x0, y0) = proc oi -> do
 
   -- calculate orientation...
   o  <- ((-pi/2)+) ^<< integral -< l + r
-  
+
   -- ...velocity and acceleration...
   t  <- hold False -< uiThrust ui
-  th <- arr (\d -> if d then accel else 0.0) -< t 
+  th <- arr (\d -> if d then accel else 0.0) -< t
   let tx = th * cos o
       ty = th * sin o
-  
+
   rec
     ax <- uncurry (-) ^<< (returnA *** ((* frictionLoss) ^<< integral)) -< (tx, ax)
     ay <- uncurry (-) ^<< (returnA *** ((* frictionLoss) ^<< integral)) -< (ty, ay)
-  
+
   vx <- integral -< ax
   vy <- integral -< ay
-  
+
   -- ...position
   x  <- teleport w buffer x0 -< vx
   y  <- teleport h buffer y0 -< vy
-  
+
   -- is the user firing? have we reloaded our guns?
   f  <- reload reloadTime -< uiFire ui
-  
+
   -- are we drawing the thrusters?
   dt <- reload thrusterFlickerPeriod <<^ gate (Event ()) -< t
-  
+
   -- check for crash
   die <- arr oiHit -< oi
-  
+
   -- ...return observable state
   returnA -<
     ObjectOutput {
@@ -111,10 +111,9 @@ shipSF (w, h) (x0, y0) = proc oi -> do
  where
    -- blltSpwn - create a new bullet signal function
    blltSpwn :: Point2 -> Point2 -> Angle -> Object
-   blltSpwn (x0,y0) (vx, vy) o = 
+   blltSpwn (x0,y0) (vx, vy) o =
      let (x, y) = (x0 + (bulletBox * cos o),
                    y0 + (bulletBox * sin o))
      in bulletSF (w, h) (x,y) (vx, vy) o
 
 -- #### Function definitions ###################################################
-

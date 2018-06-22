@@ -4,7 +4,7 @@
 -- TODO Implement bonus scores
 -- TODO Implement bonus life
 
-{-# OPTIONS_GHC -XArrows -XScopedTypeVariables #-}
+{-# LANGUAGE Arrows, ScopedTypeVariables #-}
 module Main (main) where
 
 -- Import random
@@ -162,9 +162,9 @@ actuate w _ out = do
 
 -- initAsteroids - create initial asteroid objects
 initAsteroids :: RandomGen g => Int -> Point2 -> Rand g [Object]
-initAsteroids n safe = replicateM n (createAsteroid safe) 
+initAsteroids n safe = replicateM n (createAsteroid safe)
 
--- initGameObjects - all initial game objects 
+-- initGameObjects - all initial game objects
 initGameObjects :: RandomGen g => Rand g (IList Object)
 initGameObjects = do
   let ship = shipSF (wWidth, wHeight) centre
@@ -183,7 +183,7 @@ route (gi,oos) sfs = IL.mapWithKey routeAux $ sfs
                                               else NoEvent,
                                     oiUserInput = giUserInput gi },
                       obj)
-    
+
     hs = hits . IL.assocs $ oos
 
 -- killOrSpawn - adds and removes signal functions upon requests from the game objects, NB: we get passed the old [ObjectOuput] and the new [ObjectOutput]
@@ -218,7 +218,7 @@ createAsteroid (cx, cy) = do
 
 -- asteroidsKilled - returns a function that increments the score for each asteroid killed
 asteroidsKilled :: IList ObjectOutput -> Event (Score -> Score)
-asteroidsKilled oos = foldr (mergeBy (.)) NoEvent 
+asteroidsKilled oos = foldr (mergeBy (.)) NoEvent
                         . map (flip tag (+killPoints) . ooKillReq)
                         . filter ((== Asteroid) . ooObjClass) . IL.elems $ oos
 
@@ -277,9 +277,9 @@ gameRound g objs = proc ui -> do
                giRespawn   = respawn
              }
     oos <- gameCore g objs -< (gi, oos)
-  
+
   gameOver <- edge -< lives <= 0
-  
+
   returnA -< GameOutput {
                goGraphic  = overGraphics [drawObjectOutput oos,
                                           drawScore score,
@@ -325,7 +325,7 @@ playRound g init = proc ui -> do
 
 -- endlessLoop - play endless rounds
 endlessLoop :: RandomGen g => g -> SF UserInput Graphic
-endlessLoop g = 
+endlessLoop g =
   let (initObjs, g') = flip runRand g initGameObjects
       (g'', _) = split g
   in switch (menu g &&& arr uiLeftClick)
