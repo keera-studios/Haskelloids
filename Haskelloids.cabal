@@ -72,7 +72,8 @@ Executable Haskelloids
     containers  == 0.*,
     random      == 1.*,
     MonadRandom == 0.5.*,
-    hmatrix     == 0.18.*,
+    matrix      == 0.3.*,
+    vector      == 0.12.*,
     HGL         == 3.*,
     Yampa       == 0.10.*
 
