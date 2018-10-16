@@ -1,4 +1,5 @@
-{-# LANGUAGE Arrows #-}
+{-# LANGUAGE Arrows       #-}
+{-# LANGUAGE BangPatterns #-}
 module Haskelloids.Object.Asteroid (RoidSz(..),
                                     asteroidSF
                                    )where
