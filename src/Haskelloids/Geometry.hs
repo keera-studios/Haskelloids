@@ -13,8 +13,9 @@ import Graphics.HGL.Draw.Picture (polyline, ellipse)
 
 import Data.Ratio ((%))
 import Data.List (nub)
-
-import Numeric.LinearAlgebra (Matrix, Vector, (|>), (#>), (<>), det, ident, fromLists, toList)
+import Data.Matrix (Matrix, colVector, multStd, detLU, identity, fromLists, toList)
+import Data.Vector (Vector)
+import qualified Data.Vector as Vector
 
 type Angle = Double
 type Point2 = (Double, Double)
@@ -72,23 +73,23 @@ segments :: [Point2] -> [Segment]
 segments ps = zipWith (,) ps (tail . cycle $ ps)
 
 shape :: Figure -> Shape
-shape f = shape' (ident 3) f
+shape f = shape' (identity 3) f
  where
    -- shape' - uses homogeneous coordinates so we can do affine translations (i.e. linearly dependant transformations)
    shape' :: Matrix Double -> Figure -> Shape
    shape' m (Polygon ps)         = Poly . map (transform m) $ ps'
      where ps' = makeCycle ps
    shape' m (Line ps)            = Ln . map (transform m) $ ps
-   shape' m (Circle c r)         = Circ (transform m c) ((r *) . sqrt . det $ m) -- The radius changes by the sqrt of the determinant of the transformation
-   shape' m (Translate (x, y) f) = shape' (m <> m') f
+   shape' m (Circle c r)         = Circ (transform m c) ((r *) . sqrt . detLU $ m) -- The radius changes by the sqrt of the determinant of the transformation
+   shape' m (Translate (x, y) f) = shape' (multStd m m') f
      where m' = fromLists [[1, 0, x],
                            [0, 1, y],
                            [0, 0, 1]]
-   shape' m (Scale s f)          = shape' (m <> m') f
+   shape' m (Scale s f)          = shape' (multStd m m') f
      where m' = fromLists [[s, 0, 0],
                            [0, s, 0],
                            [0, 0, 1]]
-   shape' m (Rotate phi f)       = shape' (m <> m') f
+   shape' m (Rotate phi f)       = shape' (multStd m m') f
      where m' = fromLists [[cos phi,-sin phi, 0],
                            [sin phi, cos phi, 0],
                            [0,       0,       1]]
@@ -97,10 +98,10 @@ shape f = shape' (ident 3) f
                        then (p:ps)
                        else (p:ps) ++ [p]
    toHomo :: Point2 -> Vector Double
-   toHomo (x, y) = (3 |> [x, y, 1])
+   toHomo (x, y) = (Vector.fromList [x, y, 1])
    transform :: Matrix Double -> Point2 -> Point2
    transform m p = (x, y)
-     where (x:y:_) = (toList . (m #>) . toHomo) p
+     where (x:y:_) = (toList . (multStd m) . colVector . toHomo) p
 
 regularPolygon :: Int -> Double -> Figure
 regularPolygon n r | n < 3     = error "regularPolygon - cannot construct a regular polygon of less than 3 sides"
