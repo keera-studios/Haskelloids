@@ -9,8 +9,11 @@ ghc:
   - "7.10.3"
   - "8.0.2"
   - "8.2.2"
-  - "8.4.4"
-  - "8.6.1"
+
+# 8.4.4 and 8.6.1 currently do not build.
+# See https://github.com/keera-studios/Haskelloids/issues/30
+#  - "8.4.4" 
+#  - "8.6.1"
 
 before_install:
   - travis_retry sudo apt-get update
